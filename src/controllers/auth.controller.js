@@ -1,5 +1,6 @@
 const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
+const emailService = require('../services/email.service');
 require('dotenv').config();
 
 // Register a new user
@@ -24,10 +25,11 @@ const registerUserController = async (req, res) => {
         }
         // Create new user
         user = new userModel({ email: normalizedEmail, name, password });
+        await user.save();
+        // Generate JWT token
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' })
         res.cookie('token', token);
 
-        await user.save();
         res.status(201).json({ 
             status: 'success',
             message: 'User registered successfully',
@@ -38,6 +40,8 @@ const registerUserController = async (req, res) => {
                 name: user.name
             }
         });
+        // Send registration email
+        await emailService.sendRegistrationEmail(user.email, user.name);
     } catch (error) {
         if (error?.code === 11000) {
             return res.status(400).json({ status: 'failed', message: 'Email already exists' });
