@@ -14,7 +14,7 @@ const transactionSchema = new mongooge.Schema({
         index: true
     },
     amount: {
-        type: Number,
+        type: mongooge.Schema.Types.Decimal128,
         required: [true, 'Amount is required'],
         min: [0.01, 'Amount must be at least 0.01']
     },
