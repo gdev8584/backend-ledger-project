@@ -1,6 +1,5 @@
 const express = require('express');
 const connectDB = require('./config/dbConnection');
-const authRoutes = require('./routes/auth.routes');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
@@ -14,8 +13,13 @@ app.get('/', (req, res) => {
     res.send('Welcome to the Ledger API');
 });
 
-// Routes
+/* Routes */
+const authRoutes = require('./routes/auth.routes');
+const accountRoutes = require('./routes/account.routes');
+
+// Use routes
 app.use('/api/auth', authRoutes);
+app.use('/api/accounts', accountRoutes);
 
 
 module.exports = app;
