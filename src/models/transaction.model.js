@@ -36,6 +36,7 @@ const transactionSchema = new mongooge.Schema({
 , { timestamps: true }
 );
 
+
 const transactionModel = mongooge.model('transaction', transactionSchema);
 
 module.exports = transactionModel;
